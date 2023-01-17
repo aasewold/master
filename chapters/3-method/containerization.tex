@@ -1,0 +1,46 @@
+\section{Containerization}
+\label{sec:containerization}
+% \todo{subsection of 2?}
+
+To run TransFuser in a reproducible and stable environment,
+we defined a Docker container \cite{software:docker}
+that contains all required dependencies.
+
+The containerization approach enables reliable reproducability
+as well as robust deployment regardless of the target environment.
+Our main motivation for this approach is the simplified deployment
+required to train and evaluate TransFuser.
+
+Note that we do not use the conda \cite{software:conda} environment
+as provided by the TransFuser authors,
+but instead install required packages
+using the more traditional \texttt{pip} tool \cite{software:pip}.
+
+However, the Docker container runtime is not well-suited for all environments.
+Specifically, for HPC clusters such as Idun,
+the Singularity container runtime \cite{software:singularity} is often preferred \cite{princeton:singularity}.
+Singularity provides several benefits for HPC administrators,
+such as preventing users from requiring root privileges, \todo{cite downsides of root access?}
+and its immutable container images that simplify concurrent access from multiple compute nodes. \todo{cite something?}
+
+Therefore, as preparations to utilize the Idun cluster for future experiments,
+we have developed a method to run the CARLA simulator and clients on Idun.
+In short, we utilize our existing experience with Docker to make
+Dockerfiles as container definitions,
+then convert these to Singularity images using the
+\texttt{singularity build} tool.
+These Singularity images can be run on Idun
+both manually and in batch jobs using the Slurm workload manager.
+During development,
+we have tested executing batch jobs with both CARLA and a simple client we developed called Carlo.\footnote{\url{https://github.com/aasewold/carlo}}
+Detailed descriptions can be found in \autoref{app:instructions}.
+In short,
+we provide a Slurm script capable of launching
+an arbitrary number of jobs,
+where each job consists of an instance of the CARLA simulator and a connected client,
+for instance an expert agent, TransFuser, or a reinforcement-learning agent.
+This makes it possible to perform tasks such as
+dataset generation,
+TransFuser training and evaluation,
+and reinforcement-learning algorithms such as Direct Policy Learning which require an interactive environment,
+on the Idun cluster.

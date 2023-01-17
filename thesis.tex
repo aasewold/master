@@ -1,0 +1,47 @@
+\documentclass[american,oneside]{ntnuthesis} % TODO: Remove titlepage, oneside
+
+\title{Computer Science, Specialization Project}
+\shorttitle{Specialization Project}
+\author{Aksel Lunde Aase \and Mathias Wold}
+\shortauthor{A. L. Aase \and M. Wold}
+\date{\today}
+
+\addbibresource{thesis.bib}
+
+\input{preamble.tex}
+\input{glossary.tex}
+
+\begin{document}
+
+\include{titlepage.tex}
+
+\include{chapters/0a-abstract.tex}
+\include{chapters/0b-sammendrag.tex}
+\include{chapters/0c-preface.tex}
+
+\tableofcontents
+% \listoffigures
+% \listoftables
+% \lstlistoflistings
+
+\listoftodos
+
+\printglossary[type=\acronymtype] % Print acronyms
+\printglossary                    % Print glossary
+
+\include{chapters/1-introduction}
+\include{chapters/2-background}
+\include{chapters/3-method/__init__}
+\include{chapters/4-experiments-results}
+\include{chapters/5-discussion}
+\include{chapters/6-conclusion}
+
+\chapter*{\bibname}
+\printbibliography[heading=none]
+
+% \input{chapters/papers.tex}
+
+\appendix
+\include{appendices/instructions/__init__.tex}
+
+\end{document}
