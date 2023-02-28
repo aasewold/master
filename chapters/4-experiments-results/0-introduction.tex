@@ -1,0 +1,22 @@
+\chapter{Experiments and Results}
+\label{chap:results}
+
+% The results chapter should simply present the results of applying the methods presented in the method chapter without further ado. This chapter will typically contain many graphs, tables, etc. Sometimes it is natural to discuss the results as they are presented, combining them into a "Results and Discussion" chapter, but more often they are kept separate.
+
+
+In this paper we perform three experiments.
+First, we establish a baseline 
+by evaluating TransFuser using the published ensemble of three sets of weights on the Longest6 benchmark
+as described in \cref{sec:evaluation}.
+Then, using the original dataset available online\footnote{\url{https://github.com/autonomousvision/transfuser\#dataset-and-training}},
+we train TransFuser to produce three new sets of weights from scratch,
+using a different random seed for each set of weights.
+We then perform evaluations of TransFuser
+both using one of these sets of weights alone,
+and using an ensemble of all three sets of weights.
+Using the same containerized environment for all of these experiments ensures that the results are comparable,
+but for curiosity we also compare the results with the published results in \cite{transfuser-pami}.
+
+% We also perform qualitative analysis of the results by visually comparing the driving performance
+% with the published videos\footnote{\url{https://www.youtube.com/playlist?list=PL6LvknlY2HlQG3YQ2nMIx7WcnyzgK9meO}}
+% showcasing the original TransFuser's behaviour on this benchmark.

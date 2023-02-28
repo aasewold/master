@@ -1,0 +1,142 @@
+\section{Deep Learning}
+
+Deep learning is a subset of machine learning that uses artificial neural networks to model complex patterns in data.
+Artificial neural networks are high-dimensional non-linear mathematical functions
+composed from common building blocks like
+convolutions, matrix multiplications, and various non-linear functions.
+In the context of self-driving vehicles,
+deep learning algorithms can be used to analyze images and other sensory data to make decisions about how to navigate the environment.
+Artificial neural networks can be trained using supervised, unsupervised, or reinforcement learning techniques,
+depending on the specific problem and dataset.
+In this section,
+we will explore some of the key concepts and techniques used in deep learning for self-driving vehicles.
+
+
+\subsection{Supervised learning}
+\label{sec:supervised-learning}
+% 90% literally written by chatgpt lmao 
+Supervised learning is a type of machine learning algorithm witch utilizes a labeled dataset.
+That is, the dataset consists of pairs of input and output data,
+and the model is trained to predict the output ("label") given the input.
+The goal of supervised learning is to make a model
+capable of making predictions on new data
+based on the patterns it learned from the training data.
+In the case of self-driving vehicles,
+the labeled data might consist of images and the corresponding steering angles for those images,
+with the goal of the model being to predict the correct steering angle for new,
+unseen images.
+
+A common algorithm used in supervised learning is stochastic gradient descent.
+The algorithm works by iteratively querying the model for a prediction given an input,
+and then updating the model's parameters to reduce the error between the predicted output and the true label.
+At each iteration, the algorithm computes the gradient of the error with respect to the model's parameters and uses this gradient to update the parameters in a direction that reduces the error.
+This process is repeated until a satisfactory low error is achieved.
+
+
+\subsection{Imitation Learning}
+
+\acrfull{imitation-learning} learning is an approach to training autonomous agents
+where the agents are trained to imitate the behaviour of an expert agent.
+The expert agent is used to determine the best course of action $a$ when exposed to different states $s$,
+which results in sequences of state-action pairs $(s, a)$.
+These state-action pairs serve as the ideal action choices
+that we wish to teach the imitating agent.
+Within the IL regime,
+there are three main algorithms for learning,
+which we will explore in further detail.
+
+\acrfull{behavioural-cloning} is one approach where the state-action pairs
+are treated as inputs to a supervised learning algorithm.
+Given an expert policy $\pi^*$ that one wishes to imitate,
+first generate a dataset $\mathcal{D}$
+with $N$ samples $\mathcal{D}_i = (s^*_i, a^*_i), i = 1 \dots N$
+from the expert policy distribution $d^{\pi^*}$.
+Then, using supervised learning,
+recover an approximate policy $\pi_\theta$
+that minimizes the training loss $\mathcal{L}$:
+$$
+\pi_\theta =
+    \argmin_{\pi_{\hat{\theta}}}
+        \sum_{i=1}^{N}
+            \mathcal{L} \left(a_i^*, \pi_{\hat{\theta}} \left(s_i^*\right) \right)
+$$
+
+Behaviour cloning benefits greatly from the large amount of research on supervised learning. \todo{citation needed?}
+However, there are significant drawbacks to the method.
+One such drawback is the 
+Distribution Shift problem \cite{wensun:il}
+in which during evaluation the agent is exposed to states
+not seen during training.
+This can cause the agent to choose actions which bring it further from its known domain,
+which can result in cascading and catastrophic failure.
+Using a self-driving vehicle as an example,
+consider an expert agent which always manages to drive in the center of its lane.
+A BC agent trained to mimic this expert may by chance and error end up slightly away from the center,
+causing it to experience states never before seen during training.
+The BC agent is not trained to handle this state,
+which may cause it to drift further and further away from the lane center.
+
+To mitigate this,
+one method is to increase the variance of the states in the training such.
+For instance,
+instead of always letting the expert agent decide how the vehicle moves,
+random actions could be chosen with a probability $\epsilon$,
+and the actions the expert chooses to correct these mistakes are saved as training data.
+Another approach is to continuously run the imitating agent to generate states
+following the imitation agent's distribution $d^{\pi_{\theta}}$,
+but still query the expert for the correct actions.
+
+This is the idea behind Direct Policy Learning,
+where we include the expert in the training process interactively
+to correct the imitating agent's errors.
+The requirement to have an interactive expert is often costly and not always feasible,
+for instance when using a human expert,
+but in simulated cases it is often possible.
+An example of Direct Policy Learning
+is the DAgger algorithm \cite{dagger},
+which continuously expands the training dataset
+by querying the expert agent for corrections to the imitating agent's choices.
+
+\begin{comment}
+Direct Policy Learning
+- interactive expert
+- for each state s query expert to retrieve action a
+  - supervised learning on (s, a)
+- queries the expert on-demand to get labels for unseen scenarios during training
+    - but still have to cause those scenarios to happen to actually train on them
+- expert doesn't assume (s1, a1) to be independent from (s2, a2) - better planning
+- variants:
+    - DAGGER aggregates data into a big dataset which is trained on continuously
+    - SEARN \& SMILe seems to only train on the latest sample
+
+Inverse Reinforcement Learning
+- learn a reward function $R$ from observed behaviour that maps states to a reward $R: (s, a) \rightarrow r$
+- then do reinforcement learning using this reward function
+- repeat 
+
+
+\begin{enumerate}
+    \item Behaviour Cloning - i.i.d. assumption not valid
+    \item Direct Policy Learning, DAgger
+    \item Adversarial Imitation / Inverse Reinforcement Learning
+\end{enumerate}
+
+%\subsection{Reinforcement Learning}
+%\todo[inline]{Kan kanskje sløyfes siden TransFuser ikke bruker RL? Men er kanskje nice for å sammenligne med IL...}
+\end{comment}
+
+The last regime is the \acrfull{inverse-reinforcement-learning} method.
+Instead of using supervised learning to teach the imitating agent,
+IRL attempts to deduce a Reward function from the dataset,
+and then train the imitating agent using this Reward function and Reinforcement Learning.
+
+\subsection{Computer Vision}
+Computer vision is a field of artificial intelligence that focuses on interpreting visual data from the physical world. It involves the development of systems that can automatically extract and analyze information from visual sources, such as images and videos. This allows computers to perform tasks such as recognizing objects, detecting faces, and understanding scenes in real-time. In the context of autonomous driving, computer vision plays a crucial role in enabling self-driving cars to perceive and understand their surroundings in order to navigate safely and efficiently.
+
+Computer vision systems are typically trained on large datasets of labeled images and videos, which allows them to learn to identify and classify objects, scenes and actions. This training typically involves using supervised learning methods as described in \cref{sec:supervised-learning}. In the case of autonomous driving, computer vision algorithms are trained to recognize and classify objects such as other vehicles, pedestrians, road signs and traffic lights.
+
+\subsection{Vision Transformers}
+The Transformer architecture, originally proposed by \textcite{attention-is-all-you-need} in 2017, is mainly used for sequence-to-sequence natural language processing tasks such as machine translation, text generation and document summarization. Unlike traditional recurrent network architectures, which process input sequentially, Transformer models use the self-attention mechanism, where the key idea is to calculate the relevance of one output element to all input elements.  The mechanism process the entire input simultaneously, which allows them to be computations to be parallelized more efficiently. This again makes Transformer networks faster and more scalable than both traditional recurrent networks and convolutional networks. 
+
+Even though Transformers initially were designed with natural language processing in mind, their exemplary performance in models like BERT \cite{bert} and GPT-3 \cite{gpt-3} has sparked interest also in the field of computer vision. The self-attention mechanism allows processing multiple sensor modalities like RGB images and LIDAR using similar processing blocks and show great scalability to large networks and huge datasets \cite{transformers-in-vision-survey}. We will see in \cref{sec:related-work} multiple examples of models utilizing vision transformers to fuse multi-modal input. % a task normally hard to deal with
+
