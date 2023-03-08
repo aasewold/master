@@ -12,7 +12,7 @@ features are fused between the two sensor modalities leading to exchange of info
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{figures/2/transfuser-architecture.png}
+    \includegraphics[width=\textwidth]{chapters/2-background/figures/transfuser-architecture.png}
     \caption{The TransFuser architecture uses several transformer modules for the fusion of intermediate feature maps between RGB and LIDAR data. The two branches are combined and fed into an MLP before passing it to an auto-regressive waypoint prediction network.  Source: \cite{transfuser-pami}.}
     \label{fig:transfuser-architecture}
 \end{figure}
@@ -32,7 +32,7 @@ They argue that training on other vehicle's trajectories will help with sample e
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.7\textwidth]{figures/2/lav.png}
+    \includegraphics[width=.7\textwidth]{chapters/2-background/figures/lav.png}
     \caption{An overview of the Learning from All Vehicles inference architecture. It consists of three modules: A perception module, a motion planner and a low-level controller. Source: \cite{chen2022lav}.}
     \label{fig:lav}
 \end{figure}
@@ -45,7 +45,7 @@ Their end-to-end model consists of a three-stage modular pipeline, as seen in \c
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{figures/2/interfuser.png}
+    \includegraphics[width=\textwidth]{chapters/2-background/figures/interfuser.png}
     \caption{The InterFuser architecture. It consists of an encoder-decoder network built on transformers, in addition to a safety controller that constraints the output actions to enhance driving safety. Source: \cite{shao2022interfuser}.}
     \label{fig:interfuser}
 \end{figure}

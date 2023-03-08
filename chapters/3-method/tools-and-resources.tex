@@ -22,9 +22,7 @@ and 512 GiB RAM. This server is shared between members of \acrshort{naplab}, but
 
 
 \subsection{Idun}
-
-Finally,
-to prepare for a larger amount of experiments during the master thesis,
+To prepare for a larger amount of experiments during the master's thesis,
 we have built tooling and documentation to utilize the Idun High Performance Computing cluster.
 Idun provides 864 CPU cores and 80 NVIDIA GPUs to the Department of Computer Science \cite{idun:overview},
 and thus enables a much higher degree of parallelization for future experiments.
@@ -32,4 +30,5 @@ The cluster is managed using the Slurm Workload Manager \cite{slurm}.
 
 
 \subsection{VCXR}
-TODO
+For our master's thesis we got access to a new standalone desktop computer at campus called VCXR. This computer is equipped with 
+a 24 core Intel i9-13900KF CPU, a NVIDIA GeForce RTX 4090 24G GPU and 32 GiB RAM. It runs Ubuntu 20.04 with CUDA version 12. The main advantage of this machine was to have a physical desktop to use for building CARLA from source, modelling a new vehicle in Blender and importing it into the simulator via Unreal Editor (see \cref{sec:custom-vehicle}), something that was not possible to do on \texttt{nap02} or Idun. It was also used to inspect graphical differences between CARLA versions 0.9.10.1 and 0.9.14 (see TODO).
