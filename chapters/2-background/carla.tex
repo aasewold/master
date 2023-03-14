@@ -5,7 +5,7 @@
 CARLA is built with a scalable client-server architecture in mind. The server uses Unreal Engine \cite{unrealengine} as a simulation foundation and is responsible for tasks such as scene and sensor rendering, computation of realistic physics, actor updates and providing updated world information to the connected clients. Multiple clients can be connected to the CARLA server, and these send commands to the server and receive updated world information in return. Example commands are traffic generation, spawning new actors, controlling vehicles and setting weather conditions.
 
 \subsection{Python API}
-To implement the client-server functionality, the CARLA team has developed client APIs in Python \cite{carla-python-api} and C++ \cite{carla-cplusplus-api} that leverages sockets to establish a connection to the server. The work in this project is based on the latest released version of the Python API, which in the time of writing is version 0.9.13. The Python API can be used to control the core parts of the simulation: 
+To implement the client-server functionality, the CARLA team has developed client APIs in Python \cite{carla-python-api} and C++ \cite{carla-cplusplus-api} that leverages sockets to establish a connection to the server. The work in this project is based on the latest released version of the Python API, which in the time of writing is version 0.9.14. The Python API can be used to control the core parts of the simulation: 
 
 \begin{description}
     \item[World:] The world represents the simulation, and one can change properties such as weather conditions, lighting and the map to use.
@@ -21,7 +21,7 @@ The CARLA Autonomous Driving Leaderboard \cite{carla-leaderboard} is an open pla
 
 The evaluation is based on two metrics. The first is route completion, which simply is the average percentage of route distance completed. The other metric counts infractions per kilometer and aggregates them into a penalty score. The infraction types counted by the leaderboard are collisions with pedestrians, vehicles and static objects, as well as running red lights and stop signs. The route completion score and infraction score is combined into a driving score, which is the main metric of the leaderboard.
 
-There are two versions of the leaderboard. Leaderboard 1.0 is for CARLA version 0.9.10, while Leaderboard 2.0 is for the latest CARLA version (0.9.13). Although Leaderboard 2.0 is the current version, it contains no entries at the time of writing. This report will therefore discuss submissions from Leaderboard 1.0.
+There are two versions of the leaderboard. Leaderboard 1.0 is for CARLA version 0.9.10, while Leaderboard 2.0 is for the latest CARLA version (0.9.14). Although Leaderboard 2.0 is the current version, it contains no entries at the time of writing. This report will therefore discuss submissions from Leaderboard 1.0.
 
 
 \subsection{Alternatives to CARLA}
@@ -31,6 +31,53 @@ An interesting upcoming simulator is NVIDIA Drive Sim \cite{nvidia-drive-sim}. I
 
 % kun CARLA finnes på paperswithcode
 
+\subsection{Ways to run the CARLA server}
 
-\subsection{Differences between 0.9.10 and 0.9.14}
-TODO
+The primary way to use the CARLA server is by downloading and installing the packaged version of the simulator\footnote{\url{https://carla.readthedocs.io/en/0.9.14/start_quickstart/}}. The packaged version is not customizeable. One can also build CARLA from the source code\footnote{\url{https://carla.readthedocs.io/en/0.9.14/build_carla/}}. This is the recommended approach if one wants to add extra features, assets or maps to the simulator via Unreal Editor. CARLA can be built from source on Linux and Windows. The last option is to run the simulator in a Docker container\footnote{\url{https://carla.readthedocs.io/en/0.9.14/build_docker/}}. This is useful for running without a display and for running multiple servers with GPU mapping. Different versions of CARLA support different graphics APIs. Versions until 0.9.11 supports using both Vulkan and OpenGL, but only OpenGL worked for us when running without a display. Versions equal to and after 0.9.12 only support Vulkan, and worked both with and without a display connected. We used the Docker approach for all our tasks except when adding a custom vehicle, as this required a version of CARLA built from source with access to Unreal Editor. This is explained in more detail in \cref{sec:custom-vehicle}.
+
+\subsection{Graphical differences between CARLA versions 0.9.10 vs 0.9.14}
+At the time of writing, the top submissions on the CARLA Leaderboard are based on CARLA version 0.9.10. There is however a significant graphical difference between version 0.9.10 and the latest versions. \cref{fig:10-vs-14} showcases this. The primary reason for the differences is the upgrade to Unreal Engine 4.26 in CARLA version 0.9.12. The upgrade gave a much improved lighting engine which is especially noticeable in darker scenarios. 
+\todo{Reformulere dette?} As our thesis works towards closing the gap between simulation and reality, we therefore wanted to utilize the more realistic environment found in version 0.9.14. We also noticed some graphical glitches when running CARLA version 0.9.10 without a display with OpenGL in Docker (\cref{fig:black dots}). This was an know issue with OpenGL and Linux in version 0.9.10 \cite{github-rendering-issues-0.9.10}, and in order to use Vulkan with Docker without a display we had to move to upgrade the CARLA version.
+
+\begin{comment}
+    - forklare hvorfor vi bruker to versjoner in the first place
+        - unngå graphical glitches, mindre gap mellom sim og reality
+    - bedre lighting engine --> mørkere maps --> vanskelig uten headlights
+    - svarte prikker/flekker på kameratet
+    - additional maps innebygd i carla docker 0.9.14
+\end{comment}
+
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}[b]{0.6\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{chapters/2-background/figures/10-vs-14-1.jpeg}
+        \label{fig:10-vs-14-1}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.6\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{chapters/2-background/figures/10-vs-14-2.jpeg}
+        \label{fig:10-vs-14-2}
+    \end{subfigure}
+    
+    \begin{subfigure}[b]{0.6\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{chapters/2-background/figures/10-vs-14-3.jpeg}
+        \label{fig:10-vs-14-3}
+    \end{subfigure}
+    
+    \caption{Three examples comparing the graphical differences between CARLA versions 0.9.10 (left) and 0.9.14 (right).
+    In general, there is less ambient lighting and fog is more dense.
+    Additionally, CARLA 0.9.14 features a new effect where rain drops on the camera lens can distort parts of the image (lower right).
+    }
+    \label{fig:10-vs-14}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{chapters/2-background/figures/black-dots.jpg}
+    \caption{Running CARLA version 0.9.10 with OpenGL in Docker resulted in graphical glitches in the form of black dots on the cameras. The black dots can be seen in the bottom center of the left image. In this example one can see that the model thinks the road in front is blocked (the red circles in the top right image).}
+    \label{fig:black dots}
+\end{figure}

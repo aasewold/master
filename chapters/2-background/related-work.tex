@@ -40,6 +40,11 @@ They argue that training on other vehicle's trajectories will help with sample e
 Their end-to-end model consists of a three-stage modular pipeline, as seen in \cref{fig:lav}. The first stage is a perception module that maps raw sensor readings from three front-facing RGB cameras and LIDAR to map-view feature representations. Its goal is to create a robust and generalizable representation of the surrounding world, and to build vehicle-invariant features that help supervise the motion planner. The motion planner is the second stage and it uses these features to produce a series of waypoints describing the future trajectory of all vehicles that surrounds the ego-vehicle. The last stage is a low-level controller that converts motion plans into actions to be executed on the vehicle. \textcite{chen2022lav} reached the top of the CARLA Leaderboard with their submitted paper, and is currently ranked 3rd \cite{chen2022lav, pwc-carla}.
 
 
+\subsection{Trajectory-guided Control Prediction (TCP) (2022)}
+blabla\todo introduces the idea of simultaneously predicting a desired trajectory and desired control outputs.
+The
+
+
 \subsection{InterFuser (2022)}
 \textcite{shao2022interfuser} propose InterFuser, a safety-enhanced autonomous driving framework. They investigate methods for multi-modal sensor fusion in a more scalable and effective way than TransFuser's multi-stage approach. They also work towards interpretability of their end-to-end model by creating a safety mind map based on immediate features, which they argue can help unveil the model's decision basis and failure causes.
 
